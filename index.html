@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UniFlow Pro Max</title>
+    <title>UniFlow Pro - Secure Edition</title>
     
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
@@ -11,143 +11,95 @@
     <style>
         :root { 
             --primary: #007aff; 
-            --secondary: #5856d6; 
+            --danger: #ff3b30;
             --bg: #f2f2f7; 
-            --card-bg: rgba(255, 255, 255, 0.94);
-            --shadow: 0 8px 32px rgba(0,0,0,0.08);
+            --glass: rgba(255, 255, 255, 0.95);
         }
 
         body { 
-            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg);
-            margin: 0; padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
-            color: #1c1c1e;
-            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, system-ui, sans-serif; 
+            background: var(--bg); margin: 0; padding: 0; 
+            -webkit-user-select: none;
         }
 
-        .app-shell { max-width: 100%; margin: 0 auto; padding: 12px; box-sizing: border-box; }
+        .app-shell { max-width: 100%; margin: 0 auto; padding: 15px; }
 
-        /* Modern Glass Card */
+        /* Glass Cards */
         .card { 
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            margin-bottom: 16px;
-            border: 1px solid rgba(255,255,255,0.5);
+            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); 
+            margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.5);
         }
 
-        h3 { 
-            margin: 0 0 16px 0; 
-            font-size: 12px; 
-            font-weight: 800; 
-            color: #8e8e93; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
-        }
-
-        /* CENTERED & BOLD EVENTS (Όπως ζητήθηκε) */
+        /* CENTERED & BOLD EVENTS */
         .fc-event { 
-            border-radius: 10px !important; 
-            border: none !important; 
-            display: flex !important; 
-            align-items: center !important; 
-            justify-content: center !important; 
-            text-align: center !important; 
-            padding: 6px !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 10px !important; border: none !important; 
+            display: flex !important; align-items: center !important; justify-content: center !important; 
+            text-align: center !important; padding: 8px !important; cursor: pointer;
         }
-        .fc-event-title { 
-            font-weight: 800 !important; 
-            font-size: 13px !important; 
-            text-transform: uppercase; 
-            line-height: 1.1;
-            color: #fff;
+        .fc-event-title { font-weight: 800 !important; font-size: 13px !important; text-transform: uppercase; line-height: 1.1; }
+
+        /* Action Sheet (Το μενού που ανοίγει από κάτω) */
+        #action_sheet {
+            position: fixed; bottom: -100%; left: 0; width: 100%; 
+            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: 30px 30px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+            transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 2000; padding: 25px 20px 40px 20px;
+            box-sizing: border-box; text-align: center;
+        }
+        #action_sheet.active { bottom: 0; }
+        .overlay { 
+            position: fixed; top:0; left:0; width:100%; height:100%; 
+            background: rgba(0,0,0,0.4); display:none; z-index:1500; 
         }
 
-        /* Improved Form Grid */
-        .form-row { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px; }
-        @media (min-width: 600px) { .form-row { grid-template-columns: 1fr 1fr; } }
+        /* Inputs & Buttons */
+        .form-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 12px; }
+        input, select { padding: 16px; border: 1.5px solid #e5e5ea; border-radius: 14px; font-size: 16px; width: 100%; box-sizing: border-box; }
+        
+        .btn { padding: 18px; border: none; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; }
+        .btn-main { background: var(--primary); color: white; }
+        .btn-danger { background: var(--danger); color: white; margin-top: 10px; }
+        .btn-cancel { background: #e5e5ea; color: #1c1c1e; margin-top: 10px; }
+        .btn:active { transform: scale(0.96); }
 
-        input, select { 
-            -webkit-appearance: none;
-            padding: 16px; 
-            border: 1.5px solid #e5e5ea; 
-            border-radius: 14px; 
-            font-size: 16px; 
-            width: 100%; 
-            background: #fff; 
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-        }
-        input:focus { border-color: var(--primary); outline: none; }
-
-        /* Day Chips */
-        .day-selector { display: flex; justify-content: space-between; gap: 6px; margin: 12px 0; overflow-x: auto; padding-bottom: 4px; }
-        .day-chip { flex: 1; min-width: 44px; position: relative; }
+        .day-selector { display: flex; justify-content: space-between; gap: 5px; margin: 10px 0; }
+        .day-chip { flex: 1; }
         .day-chip input { display: none; }
-        .day-chip label { 
-            display: block; padding: 12px 0; background: #fff; border: 1.5px solid #e5e5ea; border-radius: 12px; 
-            text-align: center; font-size: 13px; font-weight: 700; cursor: pointer;
-        }
+        .day-chip label { display: block; padding: 12px 0; background: #fff; border: 1.5px solid #e5e5ea; border-radius: 12px; font-size: 12px; font-weight: 700; text-align: center; }
         .day-chip input:checked + label { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Action Buttons */
-        .btn { 
-            padding: 18px; border: none; border-radius: 16px; font-size: 16px; 
-            font-weight: 700; cursor: pointer; width: 100%; transition: transform 0.1s;
-        }
-        .btn-main { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(0,122,255,0.3); }
-        .btn-save { background: var(--secondary); color: white; }
-        .btn:active { transform: scale(0.97); opacity: 0.9; }
-
-        /* Calendar Adjustments */
-        #calendar { 
-            background: #fff; 
-            padding: 12px; 
-            border-radius: 24px; 
-            border: 1px solid #e5e5ea;
-        }
-        .fc-toolbar-title { font-size: 1.1em !important; font-weight: 800; }
-        .fc-button-primary { background-color: var(--primary) !important; border: none !important; border-radius: 10px !important; }
-
-        #loader { 
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%); 
-            background: rgba(0,0,0,0.9); color: white; padding: 12px 24px; 
-            border-radius: 50px; display: none; z-index: 10000; font-size: 14px; font-weight: 600;
-        }
-
-        /* Library List Styling */
-        .lib-item { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 14px; background: #f9f9fb; border-radius: 14px; margin-bottom: 8px;
-        }
+        #calendar { background: white; padding: 10px; border-radius: 24px; }
+        #loader { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 10px 25px; border-radius: 20px; display: none; z-index: 3000; }
+        .lib-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f9f9fb; border-radius: 14px; margin-bottom: 8px; }
     </style>
 </head>
 <body>
 
-<div id="loader">🔄 Ενημέρωση Cloud...</div>
+<div id="loader">🔄 Παρακαλώ περιμένετε...</div>
+<div class="overlay" id="overlay" onclick="closeSheet()"></div>
+
+<div id="action_sheet">
+    <div style="width:40px; height:5px; background:#d1d1d6; border-radius:5px; margin: 0 auto 20px auto;"></div>
+    <h2 id="sheet_title" style="margin:0; font-size:20px;">Μάθημα</h2>
+    <p id="sheet_info" style="color:#8e8e93; margin: 10px 0 25px 0;"></p>
+    <button class="btn btn-danger" onclick="confirmDelete()">Οριστική Διαγραφή</button>
+    <button class="btn btn-cancel" onclick="closeSheet()">Άκυρο</button>
+</div>
 
 <div class="app-shell">
     <div class="card">
         <h3>📚 Βιβλιοθήκη</h3>
         <div class="form-row">
             <input type="text" id="lib_title" placeholder="Όνομα Μαθήματος">
-            <select id="lib_duration">
-                <option value="60">1 ώρα</option>
-                <option value="120" selected>2 ώρες</option>
-                <option value="180">3 ώρες</option>
-            </select>
+            <select id="lib_duration"><option value="60">1 ώρα</option><option value="120" selected>2 ώρες</option><option value="180">3 ώρες</option></select>
         </div>
-        <button class="btn btn-save" onclick="addToLibrary()">Προσθήκη στη Βιβλιοθήκη</button>
-        <div id="course_library" style="margin-top:12px; max-height:160px; overflow-y:auto;"></div>
+        <button class="btn btn-main" style="background:var(--primary);" onclick="addToLibrary()">Προσθήκη</button>
+        <div id="course_library" style="margin-top:15px; max-height:150px; overflow-y:auto;"></div>
     </div>
 
     <div class="card" id="place_card" style="display:none; border: 2px solid var(--primary);">
         <h3 id="display_name" style="color:var(--primary);">📍 Τοποθέτηση</h3>
-        
         <div class="day-selector">
             <div class="day-chip"><input type="checkbox" id="d1" value="1"><label for="d1">Δ</label></div>
             <div class="day-chip"><input type="checkbox" id="d2" value="2"><label for="d2">Τ</label></div>
@@ -156,14 +108,11 @@
             <div class="day-chip"><input type="checkbox" id="d5" value="5"><label for="d5">Π</label></div>
             <div class="day-chip"><input type="checkbox" id="d6" value="6"><label for="d6">Σ</label></div>
         </div>
-
         <div class="form-row">
-            <div><label style="font-size:11px; font-weight:700; color:#8e8e93;">ΩΡΑ ΕΝΑΡΞΗΣ</label><input type="time" id="act_time"></div>
-            <div><label style="font-size:11px; font-weight:700; color:#8e8e93;">ΛΗΞΗ ΕΞΑΜΗΝΟΥ</label><input type="date" id="end_date" value="2026-05-29"></div>
+            <input type="time" id="act_time">
+            <input type="date" id="end_date" value="2026-05-29">
         </div>
-        
         <button class="btn btn-main" onclick="saveToCloud()">Μαζική Καταχώρηση</button>
-        <button class="btn" style="background:transparent; color:#ff3b30; font-size:14px;" onclick="document.getElementById('place_card').style.display='none'">Ακύρωση</button>
     </div>
 
     <div id="calendar"></div>
@@ -171,8 +120,8 @@
 
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyblzTZIcPujR-U5mouLhm5B0HKcVG1mmC6CJJkvYS79v0Ruhrh5MmNTpPKkyiLMlFs/exec';
-    let calendar;
-    let library = JSON.parse(localStorage.getItem('uni_final_v11')) || [];
+    let calendar, activeEvent = null;
+    let library = JSON.parse(localStorage.getItem('uni_final_v12')) || [];
     let activeTask = null;
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -180,25 +129,51 @@
             initialView: window.innerWidth < 768 ? 'timeGridDay' : 'timeGridWeek',
             locale: 'el',
             allDaySlot: false,
-            slotMinTime: '08:00:00',
-            height: 'auto',
             headerToolbar: { left: 'prev,next', center: 'title', right: 'today' },
-            eventClick: function(i) { if(confirm("Διαγραφή;")) deleteEvent(i.event); },
-            eventDidMount: function(info) {
-                info.el.style.backgroundColor = 'var(--primary)';
-            }
+            eventClick: function(info) { openSheet(info.event); }
         });
         calendar.render();
         renderLib();
         loadCloud();
     });
 
+    function openSheet(event) {
+        activeEvent = event;
+        document.getElementById('sheet_title').innerText = event.title;
+        const timeStr = event.start.toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'});
+        document.getElementById('sheet_info').innerText = "Προγραμματισμένο για τις " + timeStr;
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('action_sheet').classList.add('active');
+    }
+
+    function closeSheet() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('action_sheet').classList.remove('active');
+        activeEvent = null;
+    }
+
+    async function confirmDelete() {
+        if(!activeEvent) return;
+        const eventToDelete = activeEvent;
+        closeSheet();
+        document.getElementById('loader').style.display = 'block';
+        
+        try {
+            await fetch(SCRIPT_URL, { 
+                method: 'POST', mode: 'no-cors', 
+                body: JSON.stringify({ action: 'delete', title: eventToDelete.title, start: eventToDelete.start.toISOString() }) 
+            });
+            eventToDelete.remove();
+        } catch(e) { alert("Σφάλμα διαγραφής."); }
+        document.getElementById('loader').style.display = 'none';
+    }
+
     function addToLibrary() {
         const t = document.getElementById('lib_title').value;
         const d = document.getElementById('lib_duration').value;
         if(!t) return;
         library.push({t, d});
-        localStorage.setItem('uni_final_v11', JSON.stringify(library));
+        localStorage.setItem('uni_final_v12', JSON.stringify(library));
         renderLib();
         document.getElementById('lib_title').value = "";
     }
@@ -232,7 +207,6 @@
         selectedDays.forEach(dayIndex => {
             let current = new Date();
             while (current.getDay() !== dayIndex) { current.setDate(current.getDate() + 1); }
-            
             let datePart = current.toISOString().split('T')[0];
             let loopDate = new Date(datePart + 'T' + timeStr);
 
@@ -248,7 +222,7 @@
             await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert_batch', events: events }) });
             events.forEach(ev => calendar.addEvent(ev));
             document.getElementById('place_card').style.display = 'none';
-        } catch(e) { alert("Σφάλμα σύνδεσης."); }
+        } catch(e) {}
         document.getElementById('loader').style.display = 'none';
     }
 
@@ -258,13 +232,6 @@
             const d = await r.json();
             d.forEach(row => { if(row[1] && row[1].toString().includes('T')) calendar.addEvent({ title: row[0], start: row[1], end: row[2] }); });
         } catch(e) {}
-    }
-
-    async function deleteEvent(e) {
-        document.getElementById('loader').style.display = 'block';
-        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', title: e.title, start: e.start.toISOString() }) });
-        e.remove();
-        document.getElementById('loader').style.display = 'none';
     }
 </script>
 </body>
