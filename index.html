@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UniFlow Pro - Montserrat Edition</title>
+    <title>UniFlow Ultimate Sync</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
@@ -11,111 +11,57 @@
     
     <style>
         :root { 
-            --primary: #007aff; 
-            --secondary: #5856d6; 
-            --bg: #f2f2f7; 
-            --glass: rgba(255, 255, 255, 0.98);
+            --primary: #007aff; --secondary: #5856d6; --bg: #f2f2f7; 
+            --card-bg: rgba(255, 255, 255, 0.98); --text: #1c1c1e;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root { --bg: #000000; --card-bg: rgba(28, 28, 30, 0.98); --text: #ffffff; }
         }
 
-        body { 
-            font-family: 'Montserrat', sans-serif; 
-            background: var(--bg); 
-            margin: 0; padding: 0; 
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* --- LANDSCAPE PRINT ENGINE --- */
+        body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); margin: 0; transition: 0.3s; }
+        
+        /* PRINT LANDSCAPE */
         @media print {
             @page { size: landscape; margin: 5mm; }
-            .no-print, .sheet, .overlay, #loader, .accordion-header, .accordion-content, .fc-header-toolbar { 
-                display: none !important; 
-            }
-            body, .app-shell { background: white !important; padding: 0 !important; }
-            #calendar { width: 100% !important; border: none !important; }
-            .fc-event-title { color: black !important; font-size: 10pt !important; }
+            .no-print, .sheet, .overlay, #loader, .accordion-header, .accordion-content { display: none !important; }
+            body { background: white !important; color: black !important; }
+            #calendar { width: 100% !important; }
         }
 
-        .app-shell { max-width: 1400px; margin: 0 auto; padding: 8px; box-sizing: border-box; }
+        .app-shell { max-width: 1400px; margin: 0 auto; padding: 12px; }
 
-        /* Glass Cards */
-        .card { 
-            background: var(--glass); 
-            backdrop-filter: blur(20px); 
-            border-radius: 20px; padding: 12px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
-            margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.5);
-        }
+        /* Dashboard Style */
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .stat-card { background: var(--card-bg); padding: 15px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .stat-card h4 { margin: 0; font-size: 10px; text-transform: uppercase; color: #8e8e93; }
+        .stat-card p { margin: 5px 0 0 0; font-size: 18px; font-weight: 900; color: var(--primary); }
 
-        .accordion-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .accordion-content { display: none; padding-top: 10px; border-top: 1px solid #eee; margin-top: 8px; }
-        .accordion-content.active { display: block; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 15px; margin-bottom: 10px; border: 1px solid rgba(142,142,147,0.2); }
+        
+        /* PERFECT CENTERING & COLOR CODING */
+        .fc-event { border-radius: 8px !important; border: none !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+        .fc-event-title { font-weight: 900 !important; font-size: 11px !important; text-transform: uppercase; color: white; text-align: center; }
+        
+        /* Exam Style */
+        .event-exam { border: 3px dashed #fff !important; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
 
-        /* --- PERFECT VERTICAL & HORIZONTAL CENTERING --- */
-        .fc-event { 
-            border-radius: 8px !important; 
-            border: none !important; 
-            display: flex !important; 
-            align-items: center !important; /* Κεντράρισμα καθ' ύψος */
-            justify-content: center !important; /* Κεντράρισμα κατά πλάτος */
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
-
-        .fc-event-main {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .fc-event-title { 
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900 !important; /* Montserrat Black */
-            font-size: 12px !important; 
-            text-transform: uppercase; 
-            color: white; 
-            text-align: center;
-            padding: 4px;
-            letter-spacing: 0.5px;
-        }
-
-        /* Compact Toolbar */
-        .controls-row { display: flex; gap: 5px; margin-bottom: 8px; }
-        .btn { 
-            font-family: 'Montserrat', sans-serif;
-            padding: 10px 14px; border: none; border-radius: 10px; 
-            font-size: 13px; font-weight: 700; cursor: pointer; 
-            transition: 0.2s; white-space: nowrap; 
-        }
+        /* UI Elements */
+        .controls-row { display: flex; gap: 8px; margin-bottom: 10px; }
+        .btn { font-family: 'Montserrat', sans-serif; padding: 12px; border: none; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-view { background: #e5e5ea; color: #1c1c1e; flex: 1; }
         .btn-view.active { background: var(--primary); color: white; }
         .btn-print { background: #34c759; color: white; flex: 1.5; }
-        .btn-main { background: var(--primary); color: white; width: 100%; margin-top: 8px; }
-
-        input, select { 
-            font-family: 'Montserrat', sans-serif;
-            padding: 12px; border: 1.5px solid #e5e5ea; 
-            border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; 
-        }
-
-        .day-chip label { 
-            display: block; padding: 10px 0; background: #fff; 
-            border: 1.5px solid #e5e5ea; border-radius: 8px; 
-            font-size: 11px; font-weight: 900; text-align: center; width: 38px; 
-        }
-        .day-chip input:checked + label { background: var(--primary); color: white; border-color: var(--primary); }
-
-        .sheet { 
-            position: fixed; bottom: -100%; left: 0; width: 100%; 
-            background: var(--glass); border-radius: 25px 25px 0 0; 
-            z-index: 2000; padding: 20px; box-sizing: border-box; 
-            text-align: center; transition: bottom 0.3s; 
-        }
-        .sheet.active { bottom: 0; }
-        .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.3); display:none; z-index:1500; }
         
-        #calendar { background: white; padding: 10px; border-radius: 24px; }
-        #loader { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 8px 20px; border-radius: 20px; display: none; z-index: 3000; font-size: 12px; }
+        input, select { font-family: 'Montserrat', sans-serif; padding: 12px; border-radius: 10px; border: 1.5px solid #e5e5ea; width: 100%; box-sizing: border-box; background: #fff; margin-bottom: 8px; }
+
+        .day-chip input { display: none; }
+        .day-chip label { display: block; padding: 10px 0; background: #fff; border: 1.5px solid #e5e5ea; border-radius: 8px; font-size: 11px; font-weight: 900; text-align: center; width: 38px; color: #000; }
+        .day-chip input:checked + label { background: var(--primary); color: white; }
+
+        .sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--card-bg); border-radius: 25px 25px 0 0; z-index: 2000; padding: 25px; transition: 0.4s; text-align: center; }
+        .sheet.active { bottom: 0; }
+        .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display:none; z-index:1500; }
+        #loader { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 10px 20px; border-radius: 20px; display: none; z-index: 3000; }
     </style>
 </head>
 <body>
@@ -123,52 +69,53 @@
 <div id="loader">🔄 Συγχρονισμός...</div>
 <div class="overlay" id="overlay" onclick="closeAllSheets()"></div>
 
-<div id="resize_sheet" class="sheet">
-    <h3 style="margin:0 0 15px 0;">Ενημέρωση Εξαμήνου;</h3>
-    <button class="btn btn-main" onclick="confirmResize('single')">Μόνο γι' αυτό</button>
-    <button class="btn btn-main" style="background:var(--secondary);" onclick="confirmResize('all')">Σε όλα τα μελλοντικά</button>
-    <button class="btn btn-view" style="width:100%; margin-top:8px;" onclick="revertResize()">Άκυρο</button>
-</div>
-
-<div id="delete_sheet" class="sheet">
-    <h2 id="del_title" style="margin:0;">Μάθημα</h2>
-    <button class="btn btn-main" style="background:var(--danger);" onclick="confirmDelete()">Διαγραφή</button>
-    <button class="btn btn-view" style="width:100%; margin-top:8px;" onclick="closeAllSheets()">Κλείσιμο</button>
-</div>
-
 <div class="app-shell">
+    <div class="dashboard no-print">
+        <div class="stat-card"><h4>Ώρες Εβδομάδας</h4><p id="stat-hours">0</p></div>
+        <div class="stat-card"><h4>Μαθήματα</h4><p id="stat-count">0</p></div>
+    </div>
+
     <div class="controls-row no-print">
         <button class="btn btn-view active" id="btnWeek" onclick="changeView('timeGridWeek')">Εβδομάδα</button>
-        <button class="btn btn-view" id="btnDay" onclick="changeView('timeGridDay')">Ημέρα</button>
         <button class="btn btn-print" onclick="window.print()">🖨️ Landscape PDF</button>
     </div>
 
     <div class="card no-print">
-        <div class="accordion-header" onclick="toggleLibraryUI()">
-            <h3 style="margin:0; font-size:11px; color:#8e8e93; letter-spacing:1px; font-weight:900;">📚 ΒΙΒΛΙΟΘΗΚΗ & ΡΥΘΜΙΣΕΙΣ</h3>
+        <div onclick="toggleLibraryUI()" style="cursor:pointer; display:flex; justify-content:space-between;">
+            <h3 style="margin:0; font-size:11px; font-weight:900;">📚 ΡΥΘΜΙΣΕΙΣ & ΒΙΒΛΙΟΘΗΚΗ</h3>
             <span id="acc-icon">▼</span>
         </div>
-        <div class="accordion-content" id="library-content">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:8px;">
-                <input type="text" id="lib_title" placeholder="Μάθημα">
-                <select id="lib_duration"><option value="120">2 ώρες</option><option value="180">3 ώρες</option></select>
+        <div class="accordion-content" id="library-content" style="display:none; padding-top:15px;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <input type="text" id="lib_title" placeholder="Όνομα">
+                <select id="lib_color">
+                    <option value="#007aff">Μπλε (Default)</option>
+                    <option value="#ff3b30">Κόκκινο (SOS)</option>
+                    <option value="#34c759">Πράσινο</option>
+                    <option value="#ff9500">Πορτοκαλί</option>
+                    <option value="#5856d6">Μωβ</option>
+                </select>
             </div>
-            <button class="btn btn-main" style="background:var(--secondary); margin-bottom:12px;" onclick="addToLibrary()">Προσθήκη Πρότυπου</button>
-            <div id="course_library" style="max-height:100px; overflow-y:auto; border-bottom:1px solid #eee; margin-bottom:10px;"></div>
+            <button class="btn btn-view" style="width:100%; background:var(--secondary); color:white; margin-bottom:10px;" onclick="addToLibrary()">Αποθήκευση Πρότυπου</button>
+            <div id="course_library" style="max-height:100px; overflow-y:auto; margin-bottom:10px;"></div>
             
-            <div id="place_card" style="display:none; padding:10px; background:rgba(0,122,255,0.03); border-radius:15px; border:1px solid var(--primary);">
+            <div id="place_card" style="display:none; padding:12px; background:rgba(0,122,255,0.05); border-radius:15px; border:1px solid var(--primary);">
                 <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                    <div class="day-chip"><input type="checkbox" id="d1" value="1" style="display:none;"><label for="d1">Δ</label></div>
-                    <div class="day-chip"><input type="checkbox" id="d2" value="2" style="display:none;"><label for="d2">Τ</label></div>
-                    <div class="day-chip"><input type="checkbox" id="d3" value="3" style="display:none;"><label for="d3">Τ</label></div>
-                    <div class="day-chip"><input type="checkbox" id="d4" value="4" style="display:none;"><label for="d4">Π</label></div>
-                    <div class="day-chip"><input type="checkbox" id="d5" value="5" style="display:none;"><label for="d5">Π</label></div>
+                    <div class="day-chip"><input type="checkbox" id="d1" value="1"><label for="d1">Δ</label></div>
+                    <div class="day-chip"><input type="checkbox" id="d2" value="2"><label for="d2">Τ</label></div>
+                    <div class="day-chip"><input type="checkbox" id="d3" value="3"><label for="d3">Τ</label></div>
+                    <div class="day-chip"><input type="checkbox" id="d4" value="4"><label for="d4">Π</label></div>
+                    <div class="day-chip"><input type="checkbox" id="d5" value="5"><label for="d5">Π</label></div>
                 </div>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
                     <input type="time" id="act_time">
+                    <select id="repeat_step"><option value="1">Κάθε βδομάδα</option><option value="2">Κάθε 15 μέρες</option></select>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                    <select id="act_type"><option value="course">Μάθημα</option><option value="exam">Εξεταστική</option></select>
                     <input type="date" id="end_date" value="2026-05-29">
                 </div>
-                <button class="btn btn-main" onclick="saveToCloud()">🚀 Καταχώρηση</button>
+                <button class="btn btn-view" style="background:var(--primary); color:white; width:100%; margin-top:10px;" onclick="saveToCloud()">🚀 Καταχώρηση</button>
             </div>
         </div>
     </div>
@@ -176,144 +123,117 @@
     <div id="calendar"></div>
 </div>
 
+<div id="resize_sheet" class="sheet">
+    <h3>Ενημέρωση Εξαμήνου;</h3>
+    <button class="btn btn-view" style="background:var(--primary); color:white; width:100%;" onclick="confirmResize('all')">Σε όλα τα μελλοντικά</button>
+    <button class="btn btn-view" style="width:100%; margin-top:10px;" onclick="confirmResize('single')">Μόνο γι' αυτό</button>
+</div>
+
+<div id="delete_sheet" class="sheet">
+    <h2 id="del_title">Μάθημα</h2>
+    <button class="btn btn-view" style="background:var(--danger); color:white; width:100%;" onclick="confirmDelete()">Διαγραφή</button>
+    <button class="btn btn-view" style="width:100%; margin-top:10px;" onclick="closeAllSheets()">Άκυρο</button>
+</div>
+
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyblzTZIcPujR-U5mouLhm5B0HKcVG1mmC6CJJkvYS79v0Ruhrh5MmNTpPKkyiLMlFs/exec';
-    let calendar, activeEvent = null, resizeInfo = null;
-    let library = JSON.parse(localStorage.getItem('uni_final_v19')) || [];
-    let activeTask = null;
+    let calendar, activeEvent, resizeInfo, library = JSON.parse(localStorage.getItem('uni_final_v20')) || [], activeTask;
 
     document.addEventListener('DOMContentLoaded', function() {
         calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
             initialView: window.innerWidth < 768 ? 'timeGridDay' : 'timeGridWeek',
-            locale: 'el',
-            allDaySlot: false,
-            editable: true,
-            eventStartEditable: false,
-            longPressDelay: 100,
-            slotMinTime: '08:00:00',
-            slotMaxTime: '22:00:00',
-            expandRows: true,
+            locale: 'el', allDaySlot: false, editable: true, eventStartEditable: false, longPressDelay: 100,
+            slotMinTime: '08:00:00', expandRows: true,
             headerToolbar: { left: 'prev,next', center: 'title', right: 'today' },
-            eventResize: function(info) {
-                resizeInfo = info;
-                document.getElementById('overlay').style.display = 'block';
-                document.getElementById('resize_sheet').classList.add('active');
-            },
-            eventClick: function(info) { 
-                activeEvent = info.event;
-                document.getElementById('del_title').innerText = activeEvent.title;
-                document.getElementById('overlay').style.display = 'block';
-                document.getElementById('delete_sheet').classList.add('active');
-            },
-            eventDidMount: function(info) { info.el.style.backgroundColor = 'var(--primary)'; }
+            eventResize: (info) => { resizeInfo = info; openSheet('resize_sheet'); },
+            eventClick: (info) => { activeEvent = info.event; document.getElementById('del_title').innerText = activeEvent.title; openSheet('delete_sheet'); },
+            eventsSet: updateStats
         });
-        calendar.render();
-        renderLib();
-        loadCloud();
+        calendar.render(); renderLib(); loadCloud();
     });
 
-    function toggleLibraryUI() {
-        const content = document.getElementById('library-content');
-        content.classList.toggle('active');
-        document.getElementById('acc-icon').innerText = content.classList.contains('active') ? '▲' : '▼';
+    function updateStats() {
+        const evs = calendar.getEvents();
+        document.getElementById('stat-count').innerText = evs.length;
+        let totalMs = 0;
+        evs.forEach(e => { totalMs += (e.end - e.start); });
+        document.getElementById('stat-hours').innerText = (totalMs / 3600000).toFixed(1);
     }
 
-    function changeView(view) {
-        calendar.changeView(view);
-        document.querySelectorAll('.btn-view').forEach(b => b.classList.remove('active'));
-        document.getElementById(view === 'timeGridWeek' ? 'btnWeek' : 'btnDay').classList.add('active');
+    function toggleLibraryUI() { 
+        const c = document.getElementById('library-content'); 
+        c.style.display = c.style.display === 'none' ? 'block' : 'none'; 
     }
 
-    function closeAllSheets() {
-        document.querySelectorAll('.sheet').forEach(s => s.classList.remove('active'));
-        document.getElementById('overlay').style.display = 'none';
-    }
-
-    function revertResize() { if(resizeInfo) resizeInfo.revert(); closeAllSheets(); }
+    function openSheet(id) { document.getElementById('overlay').style.display = 'block'; document.getElementById(id).classList.add('active'); }
+    function closeAllSheets() { document.querySelectorAll('.sheet').forEach(s => s.classList.remove('active')); document.getElementById('overlay').style.display = 'none'; }
 
     async function confirmResize(mode) {
-        const event = resizeInfo.event;
-        const newDur = (event.end - event.start) / 60000;
-        closeAllSheets();
-        document.getElementById('loader').style.display = 'block';
-        let events = (mode === 'single') ? [event] : calendar.getEvents().filter(e => 
-            e.title === event.title && e.start >= event.start && e.start.getDay() === event.start.getDay()
-        );
-        for (let ev of events) {
-            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', title: ev.title, start: ev.start.toISOString() }) });
-            let newEnd = new Date(ev.start.getTime() + newDur * 60000);
-            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ 
-                action: 'insert_batch', events: [{ title: ev.title, start: ev.start.toISOString(), end: newEnd.toISOString(), type: 'course' }] 
-            })});
-            ev.setEnd(newEnd);
+        const ev = resizeInfo.event; const dur = (ev.end - ev.start) / 60000;
+        closeAllSheets(); document.getElementById('loader').style.display = 'block';
+        let targets = (mode === 'single') ? [ev] : calendar.getEvents().filter(e => e.title === ev.title && e.start >= ev.start);
+        for (let target of targets) {
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', title: target.title, start: target.start.toISOString() }) });
+            let newEnd = new Date(target.start.getTime() + dur * 60000);
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert_batch', events: [{ title: target.title, start: target.start.toISOString(), end: newEnd.toISOString(), type: target.extendedProps.type }] }) });
+            target.setEnd(newEnd);
         }
         document.getElementById('loader').style.display = 'none';
     }
 
     async function confirmDelete() {
-        const ev = activeEvent;
-        closeAllSheets();
-        document.getElementById('loader').style.display = 'block';
-        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', title: ev.title, start: ev.start.toISOString() }) });
-        ev.remove();
-        document.getElementById('loader').style.display = 'none';
+        closeAllSheets(); document.getElementById('loader').style.display = 'block';
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', title: activeEvent.title, start: activeEvent.start.toISOString() }) });
+        activeEvent.remove(); document.getElementById('loader').style.display = 'none';
     }
 
     function addToLibrary() {
-        const t = document.getElementById('lib_title').value;
-        const d = document.getElementById('lib_duration').value;
-        if(!t) return;
-        library.push({t, d});
-        localStorage.setItem('uni_final_v19', JSON.stringify(library));
-        renderLib();
-        document.getElementById('lib_title').value = "";
+        const t = document.getElementById('lib_title').value; const c = document.getElementById('lib_color').value;
+        if(!t) return; library.push({t, c, d: 120}); localStorage.setItem('uni_final_v20', JSON.stringify(library));
+        renderLib(); document.getElementById('lib_title').value = "";
     }
 
     function renderLib() {
         document.getElementById('course_library').innerHTML = library.map((item, i) => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#fff; border-radius:10px; margin-bottom:4px; border:1px solid #eee;">
-                <span style="font-size:13px; font-weight:700;">${item.t}</span>
-                <button onclick="startPlace(${i})" style="padding:5px 10px; border-radius:8px; border:none; background:var(--primary); color:white; font-weight:900; font-size:11px;">Χρήση</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:var(--card-bg); border-radius:10px; margin-bottom:5px; border-left: 5px solid ${item.c};">
+                <span style="font-size:12px; font-weight:700;">${item.t}</span>
+                <button onclick="startPlace(${i})" style="padding:5px 10px; border-radius:8px; border:none; background:var(--primary); color:white; font-weight:900; font-size:10px;">Χρήση</button>
             </div>`).join('');
     }
 
-    function startPlace(i) {
-        activeTask = library[i];
-        document.getElementById('place_card').style.display = 'block';
-    }
+    function startPlace(i) { activeTask = library[i]; document.getElementById('place_card').style.display = 'block'; }
 
     async function saveToCloud() {
-        const time = document.getElementById('act_time').value;
-        const end = document.getElementById('end_date').value;
+        const time = document.getElementById('act_time').value; const end = document.getElementById('end_date').value;
+        const step = parseInt(document.getElementById('repeat_step').value);
+        const type = document.getElementById('act_type').value;
         const days = Array.from(document.querySelectorAll('.day-chip input:checked')).map(cb => parseInt(cb.value));
         if(!time || days.length === 0) return alert("Συμπλήρωσε τα πάντα!");
+
         document.getElementById('loader').style.display = 'block';
-        let evs = [];
-        const limit = new Date(end + 'T23:59:59');
+        let evs = []; const limit = new Date(end + 'T23:59:59');
         days.forEach(dIdx => {
-            let cur = new Date();
-            while (cur.getDay() !== dIdx) cur.setDate(cur.getDate() + 1);
+            let cur = new Date(); while (cur.getDay() !== dIdx) cur.setDate(cur.getDate() + 1);
             let loop = new Date(cur.toISOString().split('T')[0] + 'T' + time);
             while (loop <= limit) {
-                let endE = new Date(loop.getTime() + activeTask.d * 60000);
-                evs.push({ title: activeTask.t, start: loop.toISOString(), end: endE.toISOString(), type: 'course' });
-                loop.setDate(loop.getDate() + 7);
+                let endE = new Date(loop.getTime() + 7200000); // 2h default
+                evs.push({ title: activeTask.t, start: loop.toISOString(), end: endE.toISOString(), type: type, color: activeTask.c });
+                loop.setDate(loop.getDate() + (7 * step));
             }
         });
         await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert_batch', events: evs }) });
-        evs.forEach(e => calendar.addEvent(e));
-        document.getElementById('place_card').style.display = 'none';
-        toggleLibraryUI();
-        document.getElementById('loader').style.display = 'none';
+        evs.forEach(e => calendar.addEvent({ ...e, className: e.type === 'exam' ? 'event-exam' : '' }));
+        document.getElementById('place_card').style.display = 'none'; toggleLibraryUI(); document.getElementById('loader').style.display = 'none';
     }
 
     async function loadCloud() {
         try {
-            const r = await fetch(SCRIPT_URL);
-            const d = await r.json();
-            d.forEach(row => { if(row[1] && row[1].toString().includes('T')) calendar.addEvent({ title: row[0], start: row[1], end: row[2] }); });
+            const r = await fetch(SCRIPT_URL); const d = await r.json();
+            d.forEach(row => { if(row[1] && row[1].includes('T')) calendar.addEvent({ title: row[0], start: row[1], end: row[2], color: row[4] || '#007aff', className: row[3] === 'exam' ? 'event-exam' : '' }); });
         } catch(e) {}
     }
+
+    function changeView(v) { calendar.changeView(v); document.getElementById('btnWeek').classList.toggle('active'); }
 </script>
 </body>
 </html>
