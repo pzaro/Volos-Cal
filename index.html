@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UniFlow Pro Max - Clean View</title>
+    <title>UniFlow Pro - Montserrat Edition</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
     
@@ -13,65 +14,108 @@
             --primary: #007aff; 
             --secondary: #5856d6; 
             --bg: #f2f2f7; 
-            --glass: rgba(255, 255, 255, 0.96);
+            --glass: rgba(255, 255, 255, 0.98);
         }
 
-        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 0; }
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background: var(--bg); 
+            margin: 0; padding: 0; 
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        /* PRINT STYLES */
+        /* --- LANDSCAPE PRINT ENGINE --- */
         @media print {
-            .no-print, .sheet, .overlay, #loader, .accordion-content { display: none !important; }
+            @page { size: landscape; margin: 5mm; }
+            .no-print, .sheet, .overlay, #loader, .accordion-header, .accordion-content, .fc-header-toolbar { 
+                display: none !important; 
+            }
             body, .app-shell { background: white !important; padding: 0 !important; }
-            #calendar { width: 100% !important; }
+            #calendar { width: 100% !important; border: none !important; }
+            .fc-event-title { color: black !important; font-size: 10pt !important; }
         }
 
-        .app-shell { max-width: 1200px; margin: 0 auto; padding: 12px; box-sizing: border-box; }
+        .app-shell { max-width: 1400px; margin: 0 auto; padding: 8px; box-sizing: border-box; }
 
-        /* Glass Cards & Accordion */
+        /* Glass Cards */
         .card { 
-            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border-radius: 24px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); 
-            margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.5);
+            background: var(--glass); 
+            backdrop-filter: blur(20px); 
+            border-radius: 20px; padding: 12px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
+            margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.5);
         }
 
-        .accordion-header {
-            display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; padding: 5px 0;
-        }
-
-        .accordion-content {
-            display: none; padding-top: 15px; border-top: 1px solid #eee; margin-top: 10px;
-        }
+        .accordion-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .accordion-content { display: none; padding-top: 10px; border-top: 1px solid #eee; margin-top: 8px; }
         .accordion-content.active { display: block; }
 
-        /* CENTERED & BOLD EVENTS */
+        /* --- PERFECT VERTICAL & HORIZONTAL CENTERING --- */
         .fc-event { 
-            border-radius: 8px !important; border: none !important; 
-            display: flex !important; align-items: center !important; justify-content: center !important; 
-            text-align: center !important;
+            border-radius: 8px !important; 
+            border: none !important; 
+            display: flex !important; 
+            align-items: center !important; /* Κεντράρισμα καθ' ύψος */
+            justify-content: center !important; /* Κεντράρισμα κατά πλάτος */
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
-        .fc-event-title { font-weight: 900 !important; font-size: 13px !important; text-transform: uppercase; color: white; }
 
-        /* Buttons & Toolbar */
-        .controls-row { display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; }
-        .btn { padding: 12px 16px; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap; }
-        .btn-view { background: #e5e5ea; color: #1c1c1e; }
+        .fc-event-main {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fc-event-title { 
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900 !important; /* Montserrat Black */
+            font-size: 12px !important; 
+            text-transform: uppercase; 
+            color: white; 
+            text-align: center;
+            padding: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Compact Toolbar */
+        .controls-row { display: flex; gap: 5px; margin-bottom: 8px; }
+        .btn { 
+            font-family: 'Montserrat', sans-serif;
+            padding: 10px 14px; border: none; border-radius: 10px; 
+            font-size: 13px; font-weight: 700; cursor: pointer; 
+            transition: 0.2s; white-space: nowrap; 
+        }
+        .btn-view { background: #e5e5ea; color: #1c1c1e; flex: 1; }
         .btn-view.active { background: var(--primary); color: white; }
-        .btn-print { background: #34c759; color: white; flex-grow: 1; }
-        .btn-main { background: var(--primary); color: white; width: 100%; margin-top: 10px; }
+        .btn-print { background: #34c759; color: white; flex: 1.5; }
+        .btn-main { background: var(--primary); color: white; width: 100%; margin-top: 8px; }
 
-        input, select { padding: 14px; border: 1.5px solid #e5e5ea; border-radius: 12px; font-size: 16px; width: 100%; box-sizing: border-box; background: #fff; }
-        
-        .day-chip input { display: none; }
-        .day-chip label { display: block; padding: 12px 0; background: #fff; border: 1.5px solid #e5e5ea; border-radius: 10px; font-size: 12px; font-weight: 800; text-align: center; width: 42px; }
+        input, select { 
+            font-family: 'Montserrat', sans-serif;
+            padding: 12px; border: 1.5px solid #e5e5ea; 
+            border-radius: 10px; font-size: 15px; width: 100%; box-sizing: border-box; 
+        }
+
+        .day-chip label { 
+            display: block; padding: 10px 0; background: #fff; 
+            border: 1.5px solid #e5e5ea; border-radius: 8px; 
+            font-size: 11px; font-weight: 900; text-align: center; width: 38px; 
+        }
         .day-chip input:checked + label { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Sheets */
-        .sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--glass); border-radius: 30px 30px 0 0; z-index: 2000; padding: 25px 20px; box-sizing: border-box; text-align: center; transition: bottom 0.4s; }
+        .sheet { 
+            position: fixed; bottom: -100%; left: 0; width: 100%; 
+            background: var(--glass); border-radius: 25px 25px 0 0; 
+            z-index: 2000; padding: 20px; box-sizing: border-box; 
+            text-align: center; transition: bottom 0.3s; 
+        }
         .sheet.active { bottom: 0; }
-        .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.4); display:none; z-index:1500; }
+        .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.3); display:none; z-index:1500; }
+        
         #calendar { background: white; padding: 10px; border-radius: 24px; }
-        #loader { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 10px 20px; border-radius: 20px; display: none; z-index: 3000; }
+        #loader { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 8px 20px; border-radius: 20px; display: none; z-index: 3000; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -80,48 +124,47 @@
 <div class="overlay" id="overlay" onclick="closeAllSheets()"></div>
 
 <div id="resize_sheet" class="sheet">
-    <h3>Ενημέρωση Εξαμήνου;</h3>
+    <h3 style="margin:0 0 15px 0;">Ενημέρωση Εξαμήνου;</h3>
     <button class="btn btn-main" onclick="confirmResize('single')">Μόνο γι' αυτό</button>
     <button class="btn btn-main" style="background:var(--secondary);" onclick="confirmResize('all')">Σε όλα τα μελλοντικά</button>
-    <button class="btn btn-view" style="width:100%; margin-top:10px;" onclick="revertResize()">Άκυρο</button>
+    <button class="btn btn-view" style="width:100%; margin-top:8px;" onclick="revertResize()">Άκυρο</button>
 </div>
 
 <div id="delete_sheet" class="sheet">
-    <h2 id="del_title">Μάθημα</h2>
-    <button class="btn btn-main" style="background:#ff3b30;" onclick="confirmDelete()">Διαγραφή</button>
-    <button class="btn btn-view" style="width:100%; margin-top:10px;" onclick="closeAllSheets()">Κλείσιμο</button>
+    <h2 id="del_title" style="margin:0;">Μάθημα</h2>
+    <button class="btn btn-main" style="background:var(--danger);" onclick="confirmDelete()">Διαγραφή</button>
+    <button class="btn btn-view" style="width:100%; margin-top:8px;" onclick="closeAllSheets()">Κλείσιμο</button>
 </div>
 
 <div class="app-shell">
     <div class="controls-row no-print">
         <button class="btn btn-view active" id="btnWeek" onclick="changeView('timeGridWeek')">Εβδομάδα</button>
         <button class="btn btn-view" id="btnDay" onclick="changeView('timeGridDay')">Ημέρα</button>
-        <button class="btn btn-print" onclick="window.print()">🖨️ PDF</button>
+        <button class="btn btn-print" onclick="window.print()">🖨️ Landscape PDF</button>
     </div>
 
     <div class="card no-print">
         <div class="accordion-header" onclick="toggleLibraryUI()">
-            <h3 style="margin:0; font-size:12px; color:#8e8e93; letter-spacing:1px;">📚 ΒΙΒΛΙΟΘΗΚΗ & ΤΟΠΟΘΕΤΗΣΗ</h3>
+            <h3 style="margin:0; font-size:11px; color:#8e8e93; letter-spacing:1px; font-weight:900;">📚 ΒΙΒΛΙΟΘΗΚΗ & ΡΥΘΜΙΣΕΙΣ</h3>
             <span id="acc-icon">▼</span>
         </div>
         <div class="accordion-content" id="library-content">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:8px;">
                 <input type="text" id="lib_title" placeholder="Μάθημα">
                 <select id="lib_duration"><option value="120">2 ώρες</option><option value="180">3 ώρες</option></select>
             </div>
-            <button class="btn btn-main" style="background:var(--secondary); margin-bottom:15px;" onclick="addToLibrary()">Προσθήκη Πρότυπου</button>
-            <div id="course_library" style="max-height:120px; overflow-y:auto; border-bottom:1px solid #eee; margin-bottom:15px; padding-bottom:10px;"></div>
+            <button class="btn btn-main" style="background:var(--secondary); margin-bottom:12px;" onclick="addToLibrary()">Προσθήκη Πρότυπου</button>
+            <div id="course_library" style="max-height:100px; overflow-y:auto; border-bottom:1px solid #eee; margin-bottom:10px;"></div>
             
-            <div id="place_card" style="display:none; padding:15px; background:rgba(0,122,255,0.05); border-radius:15px; border:1px solid var(--primary);">
-                <h4 id="display_name" style="margin:0 0 10px 0; color:var(--primary);">📍 Τοποθέτηση</h4>
-                <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-                    <div class="day-chip"><input type="checkbox" id="d1" value="1"><label for="d1">Δ</label></div>
-                    <div class="day-chip"><input type="checkbox" id="d2" value="2"><label for="d2">Τ</label></div>
-                    <div class="day-chip"><input type="checkbox" id="d3" value="3"><label for="d3">Τ</label></div>
-                    <div class="day-chip"><input type="checkbox" id="d4" value="4"><label for="d4">Π</label></div>
-                    <div class="day-chip"><input type="checkbox" id="d5" value="5"><label for="d5">Π</label></div>
+            <div id="place_card" style="display:none; padding:10px; background:rgba(0,122,255,0.03); border-radius:15px; border:1px solid var(--primary);">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <div class="day-chip"><input type="checkbox" id="d1" value="1" style="display:none;"><label for="d1">Δ</label></div>
+                    <div class="day-chip"><input type="checkbox" id="d2" value="2" style="display:none;"><label for="d2">Τ</label></div>
+                    <div class="day-chip"><input type="checkbox" id="d3" value="3" style="display:none;"><label for="d3">Τ</label></div>
+                    <div class="day-chip"><input type="checkbox" id="d4" value="4" style="display:none;"><label for="d4">Π</label></div>
+                    <div class="day-chip"><input type="checkbox" id="d5" value="5" style="display:none;"><label for="d5">Π</label></div>
                 </div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
                     <input type="time" id="act_time">
                     <input type="date" id="end_date" value="2026-05-29">
                 </div>
@@ -136,7 +179,7 @@
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyblzTZIcPujR-U5mouLhm5B0HKcVG1mmC6CJJkvYS79v0Ruhrh5MmNTpPKkyiLMlFs/exec';
     let calendar, activeEvent = null, resizeInfo = null;
-    let library = JSON.parse(localStorage.getItem('uni_final_v17')) || [];
+    let library = JSON.parse(localStorage.getItem('uni_final_v19')) || [];
     let activeTask = null;
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -147,6 +190,9 @@
             editable: true,
             eventStartEditable: false,
             longPressDelay: 100,
+            slotMinTime: '08:00:00',
+            slotMaxTime: '22:00:00',
+            expandRows: true,
             headerToolbar: { left: 'prev,next', center: 'title', right: 'today' },
             eventResize: function(info) {
                 resizeInfo = info;
@@ -158,7 +204,8 @@
                 document.getElementById('del_title').innerText = activeEvent.title;
                 document.getElementById('overlay').style.display = 'block';
                 document.getElementById('delete_sheet').classList.add('active');
-            }
+            },
+            eventDidMount: function(info) { info.el.style.backgroundColor = 'var(--primary)'; }
         });
         calendar.render();
         renderLib();
@@ -167,16 +214,14 @@
 
     function toggleLibraryUI() {
         const content = document.getElementById('library-content');
-        const icon = document.getElementById('acc-icon');
         content.classList.toggle('active');
-        icon.innerText = content.classList.contains('active') ? '▲' : '▼';
+        document.getElementById('acc-icon').innerText = content.classList.contains('active') ? '▲' : '▼';
     }
 
     function changeView(view) {
         calendar.changeView(view);
         document.querySelectorAll('.btn-view').forEach(b => b.classList.remove('active'));
-        if(view === 'timeGridWeek') document.getElementById('btnWeek').classList.add('active');
-        else document.getElementById('btnDay').classList.add('active');
+        document.getElementById(view === 'timeGridWeek' ? 'btnWeek' : 'btnDay').classList.add('active');
     }
 
     function closeAllSheets() {
@@ -191,11 +236,9 @@
         const newDur = (event.end - event.start) / 60000;
         closeAllSheets();
         document.getElementById('loader').style.display = 'block';
-
         let events = (mode === 'single') ? [event] : calendar.getEvents().filter(e => 
             e.title === event.title && e.start >= event.start && e.start.getDay() === event.start.getDay()
         );
-
         for (let ev of events) {
             await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', title: ev.title, start: ev.start.toISOString() }) });
             let newEnd = new Date(ev.start.getTime() + newDur * 60000);
@@ -221,22 +264,22 @@
         const d = document.getElementById('lib_duration').value;
         if(!t) return;
         library.push({t, d});
-        localStorage.setItem('uni_final_v17', JSON.stringify(library));
+        localStorage.setItem('uni_final_v19', JSON.stringify(library));
         renderLib();
+        document.getElementById('lib_title').value = "";
     }
 
     function renderLib() {
         document.getElementById('course_library').innerHTML = library.map((item, i) => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:#fff; border-radius:12px; margin-bottom:5px; border:1px solid #eee;">
-                <span><b>${item.t}</b></span>
-                <button onclick="startPlace(${i})" style="padding:6px 12px; border-radius:10px; border:none; background:var(--primary); color:white; font-weight:800; font-size:12px;">Χρήση</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; background:#fff; border-radius:10px; margin-bottom:4px; border:1px solid #eee;">
+                <span style="font-size:13px; font-weight:700;">${item.t}</span>
+                <button onclick="startPlace(${i})" style="padding:5px 10px; border-radius:8px; border:none; background:var(--primary); color:white; font-weight:900; font-size:11px;">Χρήση</button>
             </div>`).join('');
     }
 
     function startPlace(i) {
         activeTask = library[i];
         document.getElementById('place_card').style.display = 'block';
-        document.getElementById('display_name').innerText = "📍 " + activeTask.t;
     }
 
     async function saveToCloud() {
@@ -244,7 +287,6 @@
         const end = document.getElementById('end_date').value;
         const days = Array.from(document.querySelectorAll('.day-chip input:checked')).map(cb => parseInt(cb.value));
         if(!time || days.length === 0) return alert("Συμπλήρωσε τα πάντα!");
-
         document.getElementById('loader').style.display = 'block';
         let evs = [];
         const limit = new Date(end + 'T23:59:59');
@@ -261,7 +303,7 @@
         await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert_batch', events: evs }) });
         evs.forEach(e => calendar.addEvent(e));
         document.getElementById('place_card').style.display = 'none';
-        toggleLibraryUI(); // Κλείσιμο βιβλιοθήκης μετά την καταχώρηση
+        toggleLibraryUI();
         document.getElementById('loader').style.display = 'none';
     }
 
