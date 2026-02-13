@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>UniFlow Ultimate Sync</title>
+    
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+    
+    <style>
+        :root { 
+            --primary: #007aff; 
+            --secondary: #5856d6;
+            --bg: #f2f2f7; 
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text: #1c1c1e;
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            padding: 0;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .app-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* Header Styling */
+        header {
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Glassmorphism Card */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        h3 { 
+            margin: 0 0 15px 0; 
+            font-size: 13px; 
+            font-weight: 700; 
+            color: #8e8e93; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .input-group { display: flex; flex-direction: column; }
+        
+        input, select {
+            padding: 12px 15px;
+            border: 1px solid #d1d1d6;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #fff;
+            color: var(--text);
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--primary); }
+
+        /* Library List */
+        .library-scroll {
+            max-height: 180px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border-top: 1px solid #e5e5ea;
+        }
+
+        .lib-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 5px;
+            border-bottom: 1px solid #f2f2f7;
+        }
+
+        .lib-item span { font-weight: 500; }
+
+        /* Buttons */
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-main { background: var(--primary); color: white; margin-top: 15px; width: 100%; }
+        .btn-use { background: #e5e5ea; color: var(--primary); padding: 6px 15px; font-size: 13px; border-radius: 10px; }
+        .btn-print { background: #3a3a3c; color: white; margin-top: 10px; width: 100%; }
+
+        .btn:active { transform: scale(0.97); opacity: 0.8; }
+
+        /* Calendar Visuals */
+        #calendar {
+            background: white;
+            padding: 15px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            border: 1px solid #fff;
+        }
+
+        .fc .fc-toolbar-title { font-size: 18px !important; font-weight: 700; }
+        .fc .fc-button-primary { background: var(--primary); border: none; border-radius: 10px; text-transform: capitalize; }
+        
+        /* Loading Spinner */
+        #loader {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(28, 28, 30, 0.9);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 2000;
+            display: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .fc-header-toolbar { flex-direction: column; gap: 10px; }
+            #calendar { padding: 5px; border-radius: 15px; }
+        }
+
+        @media print { .no-print { display: none !important; } #calendar { border: none; } }
+    </style>
+</head>
+<body>
+
+<div id="loader">🔄 Συγχρονισμός...</div>
+
+<div class="app-container">
+    <header class="no-print">
+        <h1>UniFlow Pro</h1>
+    </header>
+
+    <div class="card no-print">
+        <h3>📚 Βιβλιοθήκη Μαθημάτων</h3>
+        <div class="form-grid">
+            <input type="text" id="lib_title" placeholder="Όνομα (π.χ. Αστικό Δίκαιο)">
+            <select id="lib_duration">
+                <option value="60">1 ώρα διάρκεια</option>
+                <option value="120" selected>2 ώρες διάρκεια</option>
+                <option value="180">3 ώρες διάρκεια</option>
+            </select>
+        </div>
+        <button class="btn btn-main" style="background:var(--secondary);" onclick="addToLibrary()">➕ Αποθήκευση στη Μνήμη</button>
+        <div id="course_library" class="library-scroll"></div>
+    </div>
+
+    <div class="card no-print">
+        <h3>📅 Προγραμματισμός Ημέρας</h3>
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Επιλεγμένο</label>
+                <input type="text" id="active_title" placeholder="Επίλεξε από πάνω..." readonly>
+            </div>
+            <div class="input-group">
+                <label>Ημερομηνία & Ώρα</label>
+                <input type="datetime-local" id="active_start">
+            </div>
+            <div class="input-group">
+                <label>Κατηγορία</label>
+                <select id="active_type">
+                    <option value="course">📚 Μάθημα</option>
+                    <option value="study">📝 Σημειώσεις</option>
+                    <option value="gym">🏋️ Γυμναστήριο</option>
+                    <option value="fun">🍻 Ψυχαγωγία</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-main" onclick="saveToCloud()">🚀 Καταχώρηση & Ειδοποίηση</button>
+        <button class="btn btn-print" onclick="window.print()">📄 Εξαγωγή σε PDF</button>
+    </div>
+
+    <div id="calendar"></div>
+</div>
+
+<script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx112btJ6vVM-wDzC0jvvmmSuYBORvfbNGHERLzLPl8QWD-TIH-pxV9nyn0ig3MWqr9/exec';
+    let calendar;
+    let library = JSON.parse(localStorage.getItem('uni_library')) || [];
+    let selectedDuration = 120;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.getElementById('calendar');
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: window.innerWidth < 768 ? 'timeGridDay' : 'timeGridWeek',
+            locale: 'el',
+            allDaySlot: false,
+            slotMinTime: '08:00:00',
+            slotMaxTime: '23:30:00',
+            height: 'auto',
+            nowIndicator: true,
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: window.innerWidth < 768 ? '' : 'timeGridWeek,timeGridDay'
+            },
+            eventClick: function(info) {
+                if(confirm("Διαγραφή δραστηριότητας;")) deleteEvent(info.event);
+            },
+            eventDidMount: function(info) {
+                const colors = { course: '#007aff', study: '#5856d6', gym: '#34c759', fun: '#ff9500' };
+                info.el.style.backgroundColor = colors[info.event.extendedProps.type] || '#8e8e93';
+                info.el.style.border = 'none';
+                info.el.style.borderRadius = '8px';
+                info.el.style.padding = '2px';
+            }
+        });
+        calendar.render();
+        renderLibrary();
+        loadFromCloud();
+    });
+
+    function addToLibrary() {
+        const title = document.getElementById('lib_title').value;
+        const dur = document.getElementById('lib_duration').value;
+        if(!title) return;
+        library.push({title, dur});
+        localStorage.setItem('uni_library', JSON.stringify(library));
+        renderLibrary();
+        document.getElementById('lib_title').value = "";
+    }
+
+    function renderLibrary() {
+        const div = document.getElementById('course_library');
+        div.innerHTML = library.length ? "" : "<p style='font-size:12px; color:#8e8e93; text-align:center; padding:20px;'>Η βιβλιοθήκη είναι κενή</p>";
+        library.forEach((item, index) => {
+            div.innerHTML += `
+                <div class="lib-item">
+                    <span>${item.title}</span>
+                    <button class="btn btn-use" onclick="prepareEntry('${item.title.replace(/'/g, "\\'")}', ${item.dur})">Χρήση</button>
+                </div>`;
+        });
+    }
+
+    function prepareEntry(title, dur) {
+        document.getElementById('active_title').value = title;
+        selectedDuration = dur;
+        const target = document.getElementById('active_start');
+        target.focus();
+        target.scrollIntoView({behavior: 'smooth'});
+    }
+
+    async function saveToCloud() {
+        const title = document.getElementById('active_title').value;
+        const start = document.getElementById('active_start').value;
+        const type = document.getElementById('active_type').value;
+        
+        if(!title || !start) return alert("Συμπλήρωσε όλα τα πεδία!");
+
+        const startTime = new Date(start);
+        const endTime = new Date(startTime.getTime() + selectedDuration * 60000);
+        
+        toggleLoader(true);
+        const data = { action: 'insert', title, start: startTime.toISOString(), end: endTime.toISOString(), type };
+
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+            calendar.addEvent({ title, start: startTime, end: endTime, extendedProps: { type } });
+            alert("Επιτυχής καταχώρηση! Η ειδοποίηση έχει ρυθμιστεί.");
+        } catch(e) { alert("Σφάλμα σύνδεσης."); }
+        toggleLoader(false);
+    }
+
+    async function loadFromCloud() {
+        toggleLoader(true);
+        try {
+            const response = await fetch(SCRIPT_URL);
+            const data = await response.json();
+            calendar.removeAllEvents();
+            data.forEach((row) => {
+                if (row[1] && row[1].toString().includes('T')) {
+                    calendar.addEvent({ title: row[0], start: row[1], end: row[2], extendedProps: { type: row[3] } });
+                }
+            });
+        } catch(e) { console.log("Cloud Error"); }
+        toggleLoader(false);
+    }
+
+    async function deleteEvent(event) {
+        toggleLoader(true);
+        const data = { action: 'delete', title: event.title, start: event.start.toISOString() };
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+            event.remove();
+        } catch(e) { alert("Διαγράφηκε."); }
+        toggleLoader(false);
+    }
+
+    function toggleLoader(s) { document.getElementById('loader').style.display = s ? 'block' : 'none'; }
+</script>
+
+</body>
+</html>
