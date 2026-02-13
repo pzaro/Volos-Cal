@@ -3,125 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UniFlow Pro - Ultimate Edition</title>
+    <title>UniFlow Pro - Semester Edition</title>
     
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
     
     <style>
-        :root { 
-            --primary: #007aff; 
-            --secondary: #5856d6; 
-            --bg: #f2f2f7; 
-            --glass: rgba(255, 255, 255, 0.85); 
-        }
-
-        body { 
-            font-family: -apple-system, system-ui, sans-serif; 
-            background: var(--bg); 
-            margin: 0; padding: 0; 
-            color: #1c1c1e;
-            -webkit-font-smoothing: antialiased;
-        }
-        
+        :root { --primary: #007aff; --secondary: #5856d6; --bg: #f2f2f7; --glass: rgba(255, 255, 255, 0.85); }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 0; color: #1c1c1e; }
         .app-shell { max-width: 1200px; margin: 0 auto; padding: 15px; }
         
-        /* Glassmorphism Card */
+        /* Glassmorphism Design */
         .card { 
-            background: var(--glass); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 28px; 
-            padding: 20px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
-            margin-bottom: 20px; 
-            border: 1px solid rgba(255,255,255,0.5);
+            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.5);
         }
 
-        h3 { margin: 0 0 15px 0; font-size: 11px; font-weight: 700; color: #8e8e93; text-transform: uppercase; letter-spacing: 1.5px; }
-
-        /* ΣΤΥΛ ΗΜΕΡΟΛΟΓΙΟΥ: CENTERED & BOLD */
+        /* CENTERED & BOLD EVENTS */
         .fc-event { 
-            border-radius: 12px !important; 
-            border: none !important; 
-            display: flex !important; 
-            align-items: center !important; 
-            justify-content: center !important; 
-            text-align: center !important;
-            padding: 8px !important;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 12px !important; border: none !important; 
+            display: flex !important; align-items: center !important; justify-content: center !important; 
+            text-align: center !important; padding: 10px !important;
         }
-        .fc-event-title { 
-            font-weight: 800 !important; 
-            font-size: 14px !important; 
-            text-transform: uppercase;
-            line-height: 1.2;
-        }
+        .fc-event-title { font-weight: 800 !important; font-size: 14px !important; text-transform: uppercase; line-height: 1.1; }
 
-        /* Forms & Inputs */
-        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 15px; }
+        /* Form Styling */
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 15px; }
+        label { font-size: 12px; font-weight: 600; color: #8e8e93; margin-bottom: 5px; display: block; }
         input, select { 
-            padding: 16px; border: 1.5px solid #d1d1d6; border-radius: 16px; 
-            font-size: 16px; width: 100%; box-sizing: border-box; outline: none; background: #fff;
+            padding: 14px; border: 1.5px solid #d1d1d6; border-radius: 14px; 
+            font-size: 16px; width: 100%; box-sizing: border-box; background: #fff;
         }
-        input:focus { border-color: var(--primary); }
 
-        /* Buttons */
-        .btn { 
-            padding: 16px; border: none; border-radius: 18px; font-size: 16px; 
-            font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
-        }
-        .btn-main { background: var(--primary); color: white; width: 100%; margin-top: 10px; }
-        .btn-save { background: var(--secondary); color: white; width: 100%; }
-        .btn:active { transform: scale(0.96); opacity: 0.9; }
+        .btn { padding: 16px; border: none; border-radius: 18px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s; width: 100%; }
+        .btn-main { background: var(--primary); color: white; margin-top: 10px; }
+        .btn-save { background: var(--secondary); color: white; }
+        .btn:active { transform: scale(0.96); }
 
         #calendar { background: white; padding: 20px; border-radius: 28px; box-shadow: 0 5px 25px rgba(0,0,0,0.04); }
-        .lib-scroll { max-height: 200px; overflow-y: auto; margin-top: 15px; border-top: 1px solid #eee; }
-        .lib-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #f2f2f7; }
-        
-        #loader { 
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%); 
-            background: rgba(0,0,0,0.85); color: white; padding: 12px 25px; 
-            border-radius: 30px; display: none; z-index: 9999; font-weight: 600;
-        }
-
-        @media (max-width: 768px) { 
-            .fc-event-title { font-size: 12px !important; }
-            .card { padding: 15px; }
-        }
-        @media print { .no-print { display: none !important; } }
+        #loader { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 12px 25px; border-radius: 30px; display: none; z-index: 9999; }
+        .lib-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
     </style>
 </head>
 <body>
 
-<div id="loader">🔄 Επικαιροποίηση Εξαμήνου...</div>
+<div id="loader">🔄 Ενημέρωση Βάσης Δεδομένων...</div>
 
 <div class="app-shell">
-    <div class="card no-print">
-        <h3>📚 Βιβλιοθήκη Μαθημάτων (Πρότυπα)</h3>
+    <div class="card">
+        <h3>📚 Βιβλιοθήκη</h3>
         <div class="form-row">
-            <input type="text" id="lib_title" placeholder="Όνομα Μαθήματος">
-            <select id="lib_duration">
-                <option value="60">1 ώρα</option>
-                <option value="120" selected>2 ώρες</option>
-                <option value="180">3 ώρες</option>
-            </select>
+            <div><label>Μάθημα</label><input type="text" id="lib_title" placeholder="π.χ. Ανατομία"></div>
+            <div><label>Διάρκεια</label><select id="lib_duration"><option value="60">1 ώρα</option><option value="120" selected>2 ώρες</option><option value="180">3 ώρες</option></select></div>
         </div>
-        <button class="btn btn-save" onclick="addToLibrary()">➕ Αποθήκευση στη Βιβλιοθήκη</button>
-        <div id="course_library" class="lib-scroll"></div>
+        <button class="btn btn-save" onclick="addToLibrary()">Αποθήκευση Προτύπου</button>
+        <div id="course_library" style="max-height:150px; overflow-y:auto; margin-top:10px;"></div>
     </div>
 
-    <div class="card no-print" id="place_card" style="display:none; border: 2.5px solid var(--primary);">
-        <h3 id="display_name" style="color:var(--primary); font-weight:800;">📍 ΤΟΠΟΘΕΤΗΣΗ</h3>
+    <div class="card" id="place_card" style="display:none; border: 2.5px solid var(--primary);">
+        <h3 id="display_name" style="color:var(--primary);">📍 Τοποθέτηση</h3>
         <div class="form-row">
-            <input type="date" id="act_date">
-            <input type="time" id="act_time">
-            <select id="repeat_type">
-                <option value="once">Μόνο μία φορά</option>
-                <option value="weekly">Εβδομαδιαία (12 εβδομάδες)</option>
-            </select>
+            <div><label>Έναρξη (Ημερομηνία)</label><input type="date" id="act_date"></div>
+            <div><label>Ώρα</label><input type="time" id="act_time"></div>
         </div>
-        <button class="btn btn-main" onclick="saveToCloud()">🚀 Οριστική Καταχώρηση</button>
+        <div class="form-row">
+            <div><label>Τύπος</label><select id="repeat_mode" onchange="toggleRepeat()"><option value="once">Μόνο μία φορά</option><option value="weekly">Εβδομαδιαία Επανάληψη</option></select></div>
+            <div id="end_date_div" style="display:none;"><label>Λήξη Εξαμήνου</label><input type="date" id="end_date" value="2026-05-29"></div>
+        </div>
+        <button class="btn btn-main" onclick="saveToCloud()">🚀 Καταχώρηση στο Πρόγραμμα</button>
     </div>
 
     <div id="calendar"></div>
@@ -130,7 +79,7 @@
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyblzTZIcPujR-U5mouLhm5B0HKcVG1mmC6CJJkvYS79v0Ruhrh5MmNTpPKkyiLMlFs/exec';
     let calendar;
-    let library = JSON.parse(localStorage.getItem('uni_final_v8')) || [];
+    let library = JSON.parse(localStorage.getItem('uni_final_v9')) || [];
     let activeTask = null;
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -138,36 +87,35 @@
             initialView: window.innerWidth < 768 ? 'timeGridDay' : 'timeGridWeek',
             locale: 'el',
             allDaySlot: false,
-            slotMinTime: '08:00:00',
-            height: 'auto',
             headerToolbar: { left: 'prev,next', center: 'title', right: 'today' },
-            eventClick: function(i) { if(confirm("Διαγραφή δραστηριότητας;")) deleteEvent(i.event); }
+            eventClick: function(i) { if(confirm("Διαγραφή;")) deleteEvent(i.event); }
         });
         calendar.render();
         renderLib();
         loadCloud();
     });
 
+    function toggleRepeat() {
+        document.getElementById('end_date_div').style.display = document.getElementById('repeat_mode').value === 'weekly' ? 'block' : 'none';
+    }
+
     function addToLibrary() {
         const t = document.getElementById('lib_title').value;
         const d = document.getElementById('lib_duration').value;
         if(!t) return;
         library.push({t, d});
-        localStorage.setItem('uni_final_v8', JSON.stringify(library));
+        localStorage.setItem('uni_final_v9', JSON.stringify(library));
         renderLib();
         document.getElementById('lib_title').value = "";
     }
 
     function renderLib() {
         const d = document.getElementById('course_library');
-        d.innerHTML = library.length ? "" : "<p style='text-align:center; color:#999; font-size:12px;'>Κενή βιβλιοθήκη</p>";
-        library.forEach((item, i) => {
-            d.innerHTML += `
-                <div class="lib-item">
-                    <span><b>${item.t}</b></span>
-                    <button class="btn" style="padding:8px 15px; font-size:12px; background:#e5e5ea; color:var(--primary); border-radius:12px;" onclick="startPlace(${i})">Τοποθέτηση</button>
-                </div>`;
-        });
+        d.innerHTML = library.map((item, i) => `
+            <div class="lib-item">
+                <span><b>${item.t}</b></span>
+                <button onclick="startPlace(${i})" style="padding:6px 12px; border-radius:10px; border:none; background:#e5e5ea; color:#007aff; font-weight:bold;">Χρήση</button>
+            </div>`).join('');
     }
 
     function startPlace(i) {
@@ -175,43 +123,38 @@
         document.getElementById('place_card').style.display = 'block';
         document.getElementById('display_name').innerText = "📍 " + activeTask.t;
         document.getElementById('act_date').value = new Date().toISOString().split('T')[0];
-        window.scrollTo({top: 100, behavior: 'smooth'});
     }
 
     async function saveToCloud() {
-        const date = document.getElementById('act_date').value;
-        const time = document.getElementById('act_time').value;
-        const repeat = document.getElementById('repeat_type').value;
-        if(!date || !time) return alert("Συμπλήρωσε ημερομηνία & ώρα!");
+        const startDateStr = document.getElementById('act_date').value;
+        const startTimeStr = document.getElementById('act_time').value;
+        const repeatMode = document.getElementById('repeat_mode').value;
+        const semesterEndStr = document.getElementById('end_date').value;
+
+        if(!startDateStr || !startTimeStr) return alert("Επίλεξε ημερομηνία και ώρα!");
 
         let events = [];
-        let num = repeat === 'weekly' ? 12 : 1;
+        let currentStart = new Date(startDateStr + 'T' + startTimeStr);
+        let limitDate = repeatMode === 'weekly' ? new Date(semesterEndStr + 'T23:59:59') : new Date(currentStart);
 
-        for(let i=0; i < num; i++) {
-            let start = new Date(date + 'T' + time);
-            start.setDate(start.getDate() + (i * 7));
-            let end = new Date(start.getTime() + activeTask.d * 60000);
-            
+        while (currentStart <= limitDate) {
+            let end = new Date(currentStart.getTime() + activeTask.d * 60000);
             events.push({
                 title: activeTask.t,
-                start: start.toISOString(),
+                start: currentStart.toISOString(),
                 end: end.toISOString(),
                 type: 'course'
             });
+            if(repeatMode === 'once') break;
+            currentStart.setDate(currentStart.getDate() + 7); // Πρόσθεσε 7 μέρες
         }
 
         document.getElementById('loader').style.display = 'block';
-        
         try {
-            await fetch(SCRIPT_URL, { 
-                method: 'POST', 
-                mode: 'no-cors', 
-                body: JSON.stringify({ action: 'insert_batch', events: events }) 
-            });
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert_batch', events: events }) });
             events.forEach(ev => calendar.addEvent(ev));
             document.getElementById('place_card').style.display = 'none';
-        } catch(e) { alert("Σφάλμα σύνδεσης."); }
-        
+        } catch(e) { alert("Σφάλμα."); }
         document.getElementById('loader').style.display = 'none';
     }
 
@@ -219,20 +162,13 @@
         try {
             const r = await fetch(SCRIPT_URL);
             const d = await r.json();
-            d.forEach(row => { 
-                if(row[1] && row[1].toString().includes('T')) {
-                    calendar.addEvent({ title: row[0], start: row[1], end: row[2] }); 
-                }
-            });
+            d.forEach(row => { if(row[1] && row[1].toString().includes('T')) calendar.addEvent({ title: row[0], start: row[1], end: row[2] }); });
         } catch(e) {}
     }
 
     async function deleteEvent(e) {
         document.getElementById('loader').style.display = 'block';
-        await fetch(SCRIPT_URL, { 
-            method: 'POST', mode: 'no-cors', 
-            body: JSON.stringify({ action: 'delete', title: e.title, start: e.start.toISOString() }) 
-        });
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', title: e.title, start: e.start.toISOString() }) });
         e.remove();
         document.getElementById('loader').style.display = 'none';
     }
