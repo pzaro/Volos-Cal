@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UniFlow Pro - Secure Edition</title>
+    <title>UniFlow Pro - Resize Edition</title>
     
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
@@ -16,15 +16,9 @@
             --glass: rgba(255, 255, 255, 0.95);
         }
 
-        body { 
-            font-family: -apple-system, system-ui, sans-serif; 
-            background: var(--bg); margin: 0; padding: 0; 
-            -webkit-user-select: none;
-        }
-
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         .app-shell { max-width: 100%; margin: 0 auto; padding: 15px; }
 
-        /* Glass Cards */
         .card { 
             background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-radius: 24px; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); 
@@ -36,10 +30,11 @@
             border-radius: 10px !important; border: none !important; 
             display: flex !important; align-items: center !important; justify-content: center !important; 
             text-align: center !important; padding: 8px !important; cursor: pointer;
+            transition: opacity 0.2s;
         }
-        .fc-event-title { font-weight: 800 !important; font-size: 13px !important; text-transform: uppercase; line-height: 1.1; }
+        .fc-event-title { font-weight: 800 !important; font-size: 13px !important; text-transform: uppercase; line-height: 1.1; color: white; }
 
-        /* Action Sheet (Το μενού που ανοίγει από κάτω) */
+        /* Action Sheet */
         #action_sheet {
             position: fixed; bottom: -100%; left: 0; width: 100%; 
             background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
@@ -48,43 +43,39 @@
             box-sizing: border-box; text-align: center;
         }
         #action_sheet.active { bottom: 0; }
-        .overlay { 
-            position: fixed; top:0; left:0; width:100%; height:100%; 
-            background: rgba(0,0,0,0.4); display:none; z-index:1500; 
-        }
+        .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.4); display:none; z-index:1500; }
 
-        /* Inputs & Buttons */
-        .form-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 12px; }
-        input, select { padding: 16px; border: 1.5px solid #e5e5ea; border-radius: 14px; font-size: 16px; width: 100%; box-sizing: border-box; }
-        
+        /* Buttons */
         .btn { padding: 18px; border: none; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; }
         .btn-main { background: var(--primary); color: white; }
         .btn-danger { background: var(--danger); color: white; margin-top: 10px; }
         .btn-cancel { background: #e5e5ea; color: #1c1c1e; margin-top: 10px; }
         .btn:active { transform: scale(0.96); }
 
+        .form-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 12px; }
+        input, select { padding: 16px; border: 1.5px solid #e5e5ea; border-radius: 14px; font-size: 16px; width: 100%; box-sizing: border-box; }
+
         .day-selector { display: flex; justify-content: space-between; gap: 5px; margin: 10px 0; }
-        .day-chip { flex: 1; }
+        .day-chip label { display: block; padding: 12px 0; background: #fff; border: 1.5px solid #e5e5ea; border-radius: 12px; font-size: 12px; font-weight: 700; text-align: center; width: 44px; }
         .day-chip input { display: none; }
-        .day-chip label { display: block; padding: 12px 0; background: #fff; border: 1.5px solid #e5e5ea; border-radius: 12px; font-size: 12px; font-weight: 700; text-align: center; }
         .day-chip input:checked + label { background: var(--primary); color: white; border-color: var(--primary); }
 
         #calendar { background: white; padding: 10px; border-radius: 24px; }
         #loader { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 10px 25px; border-radius: 20px; display: none; z-index: 3000; }
-        .lib-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f9f9fb; border-radius: 14px; margin-bottom: 8px; }
     </style>
 </head>
 <body>
 
-<div id="loader">🔄 Παρακαλώ περιμένετε...</div>
+<div id="loader">🔄 Συγχρονισμός...</div>
 <div class="overlay" id="overlay" onclick="closeSheet()"></div>
 
 <div id="action_sheet">
     <div style="width:40px; height:5px; background:#d1d1d6; border-radius:5px; margin: 0 auto 20px auto;"></div>
-    <h2 id="sheet_title" style="margin:0; font-size:20px;">Μάθημα</h2>
-    <p id="sheet_info" style="color:#8e8e93; margin: 10px 0 25px 0;"></p>
-    <button class="btn btn-danger" onclick="confirmDelete()">Οριστική Διαγραφή</button>
-    <button class="btn btn-cancel" onclick="closeSheet()">Άκυρο</button>
+    <h2 id="sheet_title">Μάθημα</h2>
+    <p id="sheet_info"></p>
+    <p style="font-size: 12px; color: var(--primary); margin-bottom: 20px;">💡 Μπορείς να αλλάξεις τη διάρκεια σέρνοντας το κάτω μέρος του μαθήματος στο ημερολόγιο.</p>
+    <button class="btn btn-danger" onclick="confirmDelete()">Διαγραφή</button>
+    <button class="btn btn-cancel" onclick="closeSheet()">Κλείσιμο</button>
 </div>
 
 <div class="app-shell">
@@ -94,8 +85,8 @@
             <input type="text" id="lib_title" placeholder="Όνομα Μαθήματος">
             <select id="lib_duration"><option value="60">1 ώρα</option><option value="120" selected>2 ώρες</option><option value="180">3 ώρες</option></select>
         </div>
-        <button class="btn btn-main" style="background:var(--primary);" onclick="addToLibrary()">Προσθήκη</button>
-        <div id="course_library" style="margin-top:15px; max-height:150px; overflow-y:auto;"></div>
+        <button class="btn btn-main" onclick="addToLibrary()">Προσθήκη</button>
+        <div id="course_library" style="margin-top:15px; max-height:120px; overflow-y:auto;"></div>
     </div>
 
     <div class="card" id="place_card" style="display:none; border: 2px solid var(--primary);">
@@ -121,27 +112,62 @@
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyblzTZIcPujR-U5mouLhm5B0HKcVG1mmC6CJJkvYS79v0Ruhrh5MmNTpPKkyiLMlFs/exec';
     let calendar, activeEvent = null;
-    let library = JSON.parse(localStorage.getItem('uni_final_v12')) || [];
-    let activeTask = null;
+    let library = JSON.parse(localStorage.getItem('uni_final_v13')) || [];
 
     document.addEventListener('DOMContentLoaded', function() {
         calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
             initialView: window.innerWidth < 768 ? 'timeGridDay' : 'timeGridWeek',
             locale: 'el',
             allDaySlot: false,
+            editable: true, // ΕΝΕΡΓΟΠΟΙΗΣΗ ΑΛΛΑΓΗΣ ΔΙΑΡΚΕΙΑΣ
+            eventStartEditable: false, // Απαγόρευση μετακίνησης σε άλλη ώρα (για αποφυγή λαθών)
+            eventResizableFromStart: false,
             headerToolbar: { left: 'prev,next', center: 'title', right: 'today' },
-            eventClick: function(info) { openSheet(info.event); }
+            
+            // ΟΤΑΝ ΑΛΛΑΖΕΙ Η ΔΙΑΡΚΕΙΑ ΜΕ ΤΟ ΣΥΡΣΙΜΟ
+            eventResize: function(info) {
+                updateDurationOnCloud(info.event);
+            },
+            
+            eventClick: function(info) { openSheet(info.event); },
+            eventDidMount: function(info) { info.el.style.backgroundColor = 'var(--primary)'; }
         });
         calendar.render();
         renderLib();
         loadCloud();
     });
 
+    async function updateDurationOnCloud(event) {
+        document.getElementById('loader').style.display = 'block';
+        const data = {
+            action: 'delete', // Πρώτα διαγράφουμε την παλιά εγγραφή
+            title: event.title,
+            start: event.start.toISOString()
+        };
+        
+        try {
+            // Διαγραφή παλιάς και εισαγωγή νέας διάρκειας
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+            const newData = {
+                action: 'insert_batch',
+                events: [{
+                    title: event.title,
+                    start: event.start.toISOString(),
+                    end: event.end.toISOString(),
+                    type: 'course'
+                }]
+            };
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(newData) });
+        } catch(e) { alert("Σφάλμα ενημέρωσης."); }
+        document.getElementById('loader').style.display = 'none';
+    }
+
     function openSheet(event) {
         activeEvent = event;
         document.getElementById('sheet_title').innerText = event.title;
-        const timeStr = event.start.toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'});
-        document.getElementById('sheet_info').innerText = "Προγραμματισμένο για τις " + timeStr;
+        const start = event.start.toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'});
+        const end = event.end.toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'});
+        document.getElementById('sheet_info').innerText = start + " έως " + end;
         document.getElementById('overlay').style.display = 'block';
         document.getElementById('action_sheet').classList.add('active');
     }
@@ -149,41 +175,34 @@
     function closeSheet() {
         document.getElementById('overlay').style.display = 'none';
         document.getElementById('action_sheet').classList.remove('active');
-        activeEvent = null;
     }
 
     async function confirmDelete() {
         if(!activeEvent) return;
-        const eventToDelete = activeEvent;
+        const ev = activeEvent;
         closeSheet();
         document.getElementById('loader').style.display = 'block';
-        
-        try {
-            await fetch(SCRIPT_URL, { 
-                method: 'POST', mode: 'no-cors', 
-                body: JSON.stringify({ action: 'delete', title: eventToDelete.title, start: eventToDelete.start.toISOString() }) 
-            });
-            eventToDelete.remove();
-        } catch(e) { alert("Σφάλμα διαγραφής."); }
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', title: ev.title, start: ev.start.toISOString() }) });
+        ev.remove();
         document.getElementById('loader').style.display = 'none';
     }
 
+    // Οι υπόλοιπες συναρτήσεις (addToLibrary, renderLib, startPlace, saveToCloud, loadCloud) παραμένουν ίδιες...
     function addToLibrary() {
         const t = document.getElementById('lib_title').value;
         const d = document.getElementById('lib_duration').value;
         if(!t) return;
         library.push({t, d});
-        localStorage.setItem('uni_final_v12', JSON.stringify(library));
+        localStorage.setItem('uni_final_v13', JSON.stringify(library));
         renderLib();
-        document.getElementById('lib_title').value = "";
     }
 
     function renderLib() {
         const d = document.getElementById('course_library');
         d.innerHTML = library.map((item, i) => `
-            <div class="lib-item">
+            <div class="lib-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:#f9f9fb; border-radius:12px; margin-bottom:5px;">
                 <span><b>${item.t}</b></span>
-                <button onclick="startPlace(${i})" style="padding:8px 16px; border-radius:10px; border:none; background:var(--primary); color:white; font-weight:bold; font-size:12px;">Χρήση</button>
+                <button onclick="startPlace(${i})" style="padding:6px 12px; border-radius:10px; border:none; background:var(--primary); color:white; font-weight:bold;">Χρήση</button>
             </div>`).join('');
     }
 
@@ -198,18 +217,14 @@
         const timeStr = document.getElementById('act_time').value;
         const semesterEndStr = document.getElementById('end_date').value;
         const selectedDays = Array.from(document.querySelectorAll('.day-chip input:checked')).map(cb => parseInt(cb.value));
-
         if(!timeStr || selectedDays.length === 0) return alert("Επίλεξε ώρα και ημέρες!");
 
         let events = [];
         const limitDate = new Date(semesterEndStr + 'T23:59:59');
-        
         selectedDays.forEach(dayIndex => {
             let current = new Date();
             while (current.getDay() !== dayIndex) { current.setDate(current.getDate() + 1); }
-            let datePart = current.toISOString().split('T')[0];
-            let loopDate = new Date(datePart + 'T' + timeStr);
-
+            let loopDate = new Date(current.toISOString().split('T')[0] + 'T' + timeStr);
             while (loopDate <= limitDate) {
                 let end = new Date(loopDate.getTime() + activeTask.d * 60000);
                 events.push({ title: activeTask.t, start: loopDate.toISOString(), end: end.toISOString(), type: 'course' });
@@ -218,11 +233,9 @@
         });
 
         document.getElementById('loader').style.display = 'block';
-        try {
-            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert_batch', events: events }) });
-            events.forEach(ev => calendar.addEvent(ev));
-            document.getElementById('place_card').style.display = 'none';
-        } catch(e) {}
+        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert_batch', events: events }) });
+        events.forEach(ev => calendar.addEvent(ev));
+        document.getElementById('place_card').style.display = 'none';
         document.getElementById('loader').style.display = 'none';
     }
 
