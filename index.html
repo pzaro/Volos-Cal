@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UniFlow Pro - Semester Edition</title>
+    <title>UniFlow Pro - Multi-Day Edition</title>
     
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
@@ -13,7 +13,6 @@
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding: 0; color: #1c1c1e; }
         .app-shell { max-width: 1200px; margin: 0 auto; padding: 15px; }
         
-        /* Glassmorphism Design */
         .card { 
             background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-radius: 28px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.5);
@@ -27,13 +26,19 @@
         }
         .fc-event-title { font-weight: 800 !important; font-size: 14px !important; text-transform: uppercase; line-height: 1.1; }
 
-        /* Form Styling */
         .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 15px; }
-        label { font-size: 12px; font-weight: 600; color: #8e8e93; margin-bottom: 5px; display: block; }
-        input, select { 
-            padding: 14px; border: 1.5px solid #d1d1d6; border-radius: 14px; 
-            font-size: 16px; width: 100%; box-sizing: border-box; background: #fff;
+        label { font-size: 12px; font-weight: 700; color: #8e8e93; margin-bottom: 5px; display: block; }
+        input, select { padding: 14px; border: 1.5px solid #d1d1d6; border-radius: 14px; font-size: 16px; width: 100%; box-sizing: border-box; background: #fff; outline: none; }
+
+        /* Day Selector Styling */
+        .day-selector { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .day-chip { flex: 1; min-width: 45px; position: relative; }
+        .day-chip input { display: none; }
+        .day-chip label { 
+            display: block; padding: 10px 5px; background: #fff; border: 1.5px solid #d1d1d6; border-radius: 12px; 
+            text-align: center; font-size: 12px; color: #1c1c1e; cursor: pointer; transition: 0.2s;
         }
+        .day-chip input:checked + label { background: var(--primary); color: white; border-color: var(--primary); }
 
         .btn { padding: 16px; border: none; border-radius: 18px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s; width: 100%; }
         .btn-main { background: var(--primary); color: white; margin-top: 10px; }
@@ -53,7 +58,7 @@
     <div class="card">
         <h3>📚 Βιβλιοθήκη</h3>
         <div class="form-row">
-            <div><label>Μάθημα</label><input type="text" id="lib_title" placeholder="π.χ. Ανατομία"></div>
+            <div><label>Μάθημα</label><input type="text" id="lib_title" placeholder="π.χ. Παθολογία"></div>
             <div><label>Διάρκεια</label><select id="lib_duration"><option value="60">1 ώρα</option><option value="120" selected>2 ώρες</option><option value="180">3 ώρες</option></select></div>
         </div>
         <button class="btn btn-save" onclick="addToLibrary()">Αποθήκευση Προτύπου</button>
@@ -62,15 +67,25 @@
 
     <div class="card" id="place_card" style="display:none; border: 2.5px solid var(--primary);">
         <h3 id="display_name" style="color:var(--primary);">📍 Τοποθέτηση</h3>
-        <div class="form-row">
-            <div><label>Έναρξη (Ημερομηνία)</label><input type="date" id="act_date"></div>
-            <div><label>Ώρα</label><input type="time" id="act_time"></div>
+        
+        <label>Επιλογή Ημερών</label>
+        <div class="day-selector">
+            <div class="day-chip"><input type="checkbox" id="d1" value="1"><label for="d1">Δευ</label></div>
+            <div class="day-chip"><input type="checkbox" id="d2" value="2"><label for="d2">Τρι</label></div>
+            <div class="day-chip"><input type="checkbox" id="d3" value="3"><label for="d3">Τετ</label></div>
+            <div class="day-chip"><input type="checkbox" id="d4" value="4"><label for="d4">Πεμ</label></div>
+            <div class="day-chip"><input type="checkbox" id="d5" value="5"><label for="d5">Παρ</label></div>
+            <div class="day-chip"><input type="checkbox" id="d6" value="6"><label for="d6">Σαβ</label></div>
         </div>
+
         <div class="form-row">
-            <div><label>Τύπος</label><select id="repeat_mode" onchange="toggleRepeat()"><option value="once">Μόνο μία φορά</option><option value="weekly">Εβδομαδιαία Επανάληψη</option></select></div>
-            <div id="end_date_div" style="display:none;"><label>Λήξη Εξαμήνου</label><input type="date" id="end_date" value="2026-05-29"></div>
+            <div><label>Ώρα Έναρξης</label><input type="time" id="act_time"></div>
+            <div><label>Λήξη Εξαμήνου</label><input type="date" id="end_date" value="2026-05-29"></div>
         </div>
-        <button class="btn btn-main" onclick="saveToCloud()">🚀 Καταχώρηση στο Πρόγραμμα</button>
+        
+        <p style="font-size: 11px; color: #8e8e93; margin-bottom: 15px;">* Το πρόγραμμα θα ξεκινήσει από την ερχόμενη εμφάνιση των επιλεγμένων ημερών.</p>
+        
+        <button class="btn btn-main" onclick="saveToCloud()">🚀 Μαζική Καταχώρηση</button>
     </div>
 
     <div id="calendar"></div>
@@ -79,7 +94,7 @@
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyblzTZIcPujR-U5mouLhm5B0HKcVG1mmC6CJJkvYS79v0Ruhrh5MmNTpPKkyiLMlFs/exec';
     let calendar;
-    let library = JSON.parse(localStorage.getItem('uni_final_v9')) || [];
+    let library = JSON.parse(localStorage.getItem('uni_final_v10')) || [];
     let activeTask = null;
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -95,16 +110,12 @@
         loadCloud();
     });
 
-    function toggleRepeat() {
-        document.getElementById('end_date_div').style.display = document.getElementById('repeat_mode').value === 'weekly' ? 'block' : 'none';
-    }
-
     function addToLibrary() {
         const t = document.getElementById('lib_title').value;
         const d = document.getElementById('lib_duration').value;
         if(!t) return;
         library.push({t, d});
-        localStorage.setItem('uni_final_v9', JSON.stringify(library));
+        localStorage.setItem('uni_final_v10', JSON.stringify(library));
         renderLib();
         document.getElementById('lib_title').value = "";
     }
@@ -122,38 +133,48 @@
         activeTask = library[i];
         document.getElementById('place_card').style.display = 'block';
         document.getElementById('display_name').innerText = "📍 " + activeTask.t;
-        document.getElementById('act_date').value = new Date().toISOString().split('T')[0];
+        window.scrollTo({top: 100, behavior: 'smooth'});
     }
 
     async function saveToCloud() {
-        const startDateStr = document.getElementById('act_date').value;
-        const startTimeStr = document.getElementById('act_time').value;
-        const repeatMode = document.getElementById('repeat_mode').value;
+        const timeStr = document.getElementById('act_time').value;
         const semesterEndStr = document.getElementById('end_date').value;
+        const selectedDays = Array.from(document.querySelectorAll('.day-chip input:checked')).map(cb => parseInt(cb.value));
 
-        if(!startDateStr || !startTimeStr) return alert("Επίλεξε ημερομηνία και ώρα!");
+        if(!timeStr || selectedDays.length === 0) return alert("Επίλεξε ώρα και τουλάχιστον μία ημέρα!");
 
         let events = [];
-        let currentStart = new Date(startDateStr + 'T' + startTimeStr);
-        let limitDate = repeatMode === 'weekly' ? new Date(semesterEndStr + 'T23:59:59') : new Date(currentStart);
+        const limitDate = new Date(semesterEndStr + 'T23:59:59');
+        
+        selectedDays.forEach(dayIndex => {
+            let current = new Date(); // Ξεκινάμε από σήμερα
+            // Βρίσκουμε την επόμενη εμφάνιση αυτής της ημέρας
+            while (current.getDay() !== dayIndex) {
+                current.setDate(current.getDate() + 1);
+            }
+            
+            let datePart = current.toISOString().split('T')[0];
+            let loopDate = new Date(datePart + 'T' + timeStr);
 
-        while (currentStart <= limitDate) {
-            let end = new Date(currentStart.getTime() + activeTask.d * 60000);
-            events.push({
-                title: activeTask.t,
-                start: currentStart.toISOString(),
-                end: end.toISOString(),
-                type: 'course'
-            });
-            if(repeatMode === 'once') break;
-            currentStart.setDate(currentStart.getDate() + 7); // Πρόσθεσε 7 μέρες
-        }
+            while (loopDate <= limitDate) {
+                let end = new Date(loopDate.getTime() + activeTask.d * 60000);
+                events.push({
+                    title: activeTask.t,
+                    start: loopDate.toISOString(),
+                    end: end.toISOString(),
+                    type: 'course'
+                });
+                loopDate.setDate(loopDate.getDate() + 7);
+            }
+        });
 
         document.getElementById('loader').style.display = 'block';
         try {
             await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'insert_batch', events: events }) });
             events.forEach(ev => calendar.addEvent(ev));
             document.getElementById('place_card').style.display = 'none';
+            // Reset checkboxes
+            document.querySelectorAll('.day-chip input').forEach(cb => cb.checked = false);
         } catch(e) { alert("Σφάλμα."); }
         document.getElementById('loader').style.display = 'none';
     }
